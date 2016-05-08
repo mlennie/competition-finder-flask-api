@@ -14,11 +14,15 @@ client = Client(auth)
 
 app = Flask(__name__)
 
-@app.route('/hello')
-def hello_world():
+@app.route('/competitors')
+def competitors():
   formatted_data = []
   params = request.args
-  response = client.search(params['name'])
+  business_name = params['name'] or ""
+  business_location = params['business_location'] or ""
+
+  response = client.search(business_name + " " + business_location)
+
   for business in response.businesses:
 
     bus_data = {
