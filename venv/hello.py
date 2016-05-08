@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 from yelp.client import Client
 from yelp.oauth1_authenticator import Oauth1Authenticator
 from IPython import embed
+from flask.ext.cors import CORS
 
 auth = Oauth1Authenticator(
   consumer_key='amk-HOw5ZaDGr4jAtkT4qw',
@@ -13,12 +14,14 @@ auth = Oauth1Authenticator(
 client = Client(auth)
 
 app = Flask(__name__)
+CORS(app)
+#cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 @app.route('/competitors')
 def competitors():
   formatted_data = []
   params = request.args
-  business_name = params['name'] or ""
+  business_name = params['business_name'] or ""
   business_location = params['business_location'] or ""
 
   response = client.search(business_name + " " + business_location)
